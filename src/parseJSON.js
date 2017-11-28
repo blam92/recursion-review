@@ -22,11 +22,12 @@ var parseJSON = function(json) {
   var makeString = function() {
     var string = counter.curChar();
     if( string === '"') {
+      counter.next();
       return "";
     } else if(counter.nextChar() !== '"') {
       string += makeString();
     }  
-
+    counter.next();
     return string;
   };
 
@@ -34,6 +35,10 @@ var parseJSON = function(json) {
     var element = [];
 
     element.push(identifier());
+    if(counter.curChar() === ',') {
+      counter.next();
+      element = element.concat(makeElement());
+    }
 
     return element;
   };
@@ -66,6 +71,9 @@ var parseJSON = function(json) {
   
 };
 
-var ownJSONTest = "[\"test\"]";
+var ownJSONTest = "[\"test\",\"\",\"2\"]";
+var secondTest = "[\"\"]";
+console.log(ownJSONTest.length);
 
-console.log(parseJSON(ownJSONTest));
+console.log(parseJSON(secondTest));
+console.log(JSON.parse(secondTest));
